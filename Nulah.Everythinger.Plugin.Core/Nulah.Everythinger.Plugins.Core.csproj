@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWpf>true</UseWpf>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <DefineConstants />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nulah.WPF.Toolbox.Utilities\Nulah.WPF.Toolbox.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

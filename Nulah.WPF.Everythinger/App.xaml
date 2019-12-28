@@ -1,0 +1,6 @@
+﻿<Application x:Class="Nulah.WPF.Everythinger.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Nulah.WPF.Everythinger"
+             StartupUri="MainWindow.xaml">
+</Application>

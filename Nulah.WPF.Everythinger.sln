@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nulah.WPF.Everythinger", "Nulah.WPF.Everythinger\Nulah.WPF.Everythinger.csproj", "{9809BF38-0832-47C7-99EC-3AEAF358A369}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nulah.Everythinger.Plugins.Core", "Nulah.Everythinger.Plugin.Core\Nulah.Everythinger.Plugins.Core.csproj", "{A4A9C02B-0B68-4461-AFBD-16AC83C3A848}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{7913BD01-18AA-47EF-B5D3-3D96A3F4A6A2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nulah.Everythinger.Plugins.Tasks", "Plugins\Tasks\Nulah.Everythinger.Plugin.Tasks\Nulah.Everythinger.Plugins.Tasks.csproj", "{68503898-A956-4470-A834-DEC7832E1F15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EF034D0B-5C51-44C6-99F3-6CFFC346EF6E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tasks", "Tasks", "{CABEB75C-A412-41EC-8251-4C50ACC6E2EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "File Monitor", "File Monitor", "{555BD260-C17B-4DAD-9574-2FAD33AF873F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nulah.Toolbox.Plugins.FileMonitor", "Plugins\File Monitor\Nulah.Toolbox.Plugins.FileMonitor\Nulah.Toolbox.Plugins.FileMonitor.csproj", "{5EC9DA52-C2FB-4506-ACF5-A2B9EDDCAD16}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nulah.Data.Sqlite.Core", "..\Nulah\Nulah.Data.Sqlite\Nulah.Data.Sqlite.Core\Nulah.Data.Sqlite.Core.csproj", "{85158FAE-65BD-43A2-9BC4-CA7C6F4DC717}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nulah.WPF.Toolbox.Utilities", "Nulah.WPF.Toolbox.Utilities\Nulah.WPF.Toolbox.Utilities.csproj", "{FCEE191F-34D3-4AB8-BE1F-09D030602FCA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9809BF38-0832-47C7-99EC-3AEAF358A369}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9809BF38-0832-47C7-99EC-3AEAF358A369}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9809BF38-0832-47C7-99EC-3AEAF358A369}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9809BF38-0832-47C7-99EC-3AEAF358A369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4A9C02B-0B68-4461-AFBD-16AC83C3A848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4A9C02B-0B68-4461-AFBD-16AC83C3A848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4A9C02B-0B68-4461-AFBD-16AC83C3A848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4A9C02B-0B68-4461-AFBD-16AC83C3A848}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68503898-A956-4470-A834-DEC7832E1F15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68503898-A956-4470-A834-DEC7832E1F15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68503898-A956-4470-A834-DEC7832E1F15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68503898-A956-4470-A834-DEC7832E1F15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EC9DA52-C2FB-4506-ACF5-A2B9EDDCAD16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EC9DA52-C2FB-4506-ACF5-A2B9EDDCAD16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EC9DA52-C2FB-4506-ACF5-A2B9EDDCAD16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EC9DA52-C2FB-4506-ACF5-A2B9EDDCAD16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85158FAE-65BD-43A2-9BC4-CA7C6F4DC717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85158FAE-65BD-43A2-9BC4-CA7C6F4DC717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85158FAE-65BD-43A2-9BC4-CA7C6F4DC717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85158FAE-65BD-43A2-9BC4-CA7C6F4DC717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCEE191F-34D3-4AB8-BE1F-09D030602FCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCEE191F-34D3-4AB8-BE1F-09D030602FCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCEE191F-34D3-4AB8-BE1F-09D030602FCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCEE191F-34D3-4AB8-BE1F-09D030602FCA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{68503898-A956-4470-A834-DEC7832E1F15} = {CABEB75C-A412-41EC-8251-4C50ACC6E2EF}
+		{CABEB75C-A412-41EC-8251-4C50ACC6E2EF} = {7913BD01-18AA-47EF-B5D3-3D96A3F4A6A2}
+		{555BD260-C17B-4DAD-9574-2FAD33AF873F} = {7913BD01-18AA-47EF-B5D3-3D96A3F4A6A2}
+		{5EC9DA52-C2FB-4506-ACF5-A2B9EDDCAD16} = {555BD260-C17B-4DAD-9574-2FAD33AF873F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05AEB44C-7D42-42B5-98A3-1C5BCD6BF95C}
+	EndGlobalSection
+EndGlobal
