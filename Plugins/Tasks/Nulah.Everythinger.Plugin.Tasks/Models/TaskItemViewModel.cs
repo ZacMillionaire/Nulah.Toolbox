@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
+using System.Windows.Input;
+using Nulah.Everythinger.Plugins.Core;
+using Nulah.WPF.Toolbox.Utilities;
 
 namespace Nulah.Everythinger.Plugins.Tasks.Models
 {
@@ -79,6 +84,17 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             set { _taskState = value; RaisePropertyChangedEvent("TaskState"); }
         }
 
+        public static List<TaskItemStates> AvailableTaskStates
+        {
+            get
+            {
+                return Enum.GetValues(typeof(TaskItemStates))
+                    .Cast<TaskItemStates>()
+                    .Where(x => x != TaskItemStates.Default)
+                    .ToList();
+            }
+        }
+
         private bool _isNew;
 
         /// <summary>
@@ -154,6 +170,15 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             EditName = Name;
         }
 
+        // example refactor for moving commands to their appropriate view models
+        public ICommand EditTaskItem
+        {
+            get
+            {
+                return new DelegateCommand<TaskItemViewModel>(_viewModel.EditTask);
+            }
+        }
+
         public void CreateNew(Guid parentListId)
         {
             IsNew = true;
@@ -164,11 +189,14 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             Edit();
         }
 
+        private readonly TaskControlViewModel _viewModel;
+
         public TaskItemViewModel()
         {
             Name = "Design mode name";
             Updated = DateTime.UtcNow;
             CreatedDate = DateTime.UtcNow;
+            _viewModel = ViewManager.GetView<TaskControlViewModel>();
         }
     }
 }

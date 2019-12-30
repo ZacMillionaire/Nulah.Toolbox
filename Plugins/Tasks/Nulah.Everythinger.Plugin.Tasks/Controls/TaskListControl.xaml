@@ -28,7 +28,7 @@
             </Button.Content>
             <Button.InputBindings>
                 <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DataContext.CreateTaskList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"/>
+                                          Command="{Binding CreateTaskList}"/>
             </Button.InputBindings>
         </Button>
         <ItemsControl Grid.Row="1" x:Name="TaskLists" ItemsSource="{Binding TaskLists}" Background="{DynamicResource ControlBackgroundDark}">
@@ -47,7 +47,7 @@
                             <Grid Margin="5,0,0,0">
                                 <Grid.InputBindings>
                                     <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DataContext.ExpandListItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
+                                          Command="{Binding ExpandListItem}"
                                           CommandParameter="{Binding}" />
                                 </Grid.InputBindings>
                                 <Grid.ColumnDefinitions>
@@ -118,7 +118,7 @@
                                     </Button.Style>
                                     <Button.InputBindings>
                                         <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DataContext.DeleteListItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
+                                          Command="{Binding DeleteListItem}"
                                           CommandParameter="{Binding}">
                                         </MouseBinding>
                                     </Button.InputBindings>
@@ -141,7 +141,7 @@
                                     </Button.Style>
                                     <Button.InputBindings>
                                         <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DataContext.EditListItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
+                                          Command="{Binding EditListItem}"
                                           CommandParameter="{Binding}">
                                         </MouseBinding>
                                     </Button.InputBindings>
@@ -164,7 +164,7 @@
                                     </Button.Style>
                                     <Button.InputBindings>
                                         <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DataContext.SaveTaskListEdit, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
+                                          Command="{Binding SaveTaskListEdit}"
                                           CommandParameter="{Binding}"/>
                                     </Button.InputBindings>
                                 </Button>
@@ -188,7 +188,7 @@
                                     </Button.Style>
                                     <Button.InputBindings>
                                         <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DataContext.CreateTaskItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
+                                          Command="{Binding CreateTaskItem}"
                                           CommandParameter="{Binding}"/>
                                     </Button.InputBindings>
                                 </Button>
@@ -217,7 +217,7 @@
                                         <local:TaskListItemControl>
                                             <local:TaskListItemControl.InputBindings>
                                                 <MouseBinding Gesture="LeftClick"
-                                                  Command="{Binding DataContext.SelectTaskItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
+                                                  Command="{Binding SelectTaskItem}"
                                                   CommandParameter="{Binding}" />
                                             </local:TaskListItemControl.InputBindings>
                                         </local:TaskListItemControl>

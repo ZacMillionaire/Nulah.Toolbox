@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using Nulah.Everythinger.Plugins.Core;
 using Nulah.Everythinger.Plugins.Tasks.Data;
 using Nulah.WPF.Toolbox.Utilities;
 
@@ -51,42 +52,43 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             }
             else
             {
+                ViewManager.RegisterView<TaskControlViewModel>(this);
                 _taskListManager = new TaskListManager();
                 __DesignModeCtor();
             }
         }
 
-        public ICommand ExpandListItem
-        {
-            get
-            {
-                return new DelegateCommand<TaskListViewModel>(ExpandItem);
-            }
-        }
+        //public ICommand ExpandListItem
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand<TaskListViewModel>(ExpandItem);
+        //    }
+        //}
 
-        public ICommand EditListItem
-        {
-            get
-            {
-                return new DelegateCommand<TaskListViewModel>(EditListEntry);
-            }
-        }
+        //public ICommand EditListItem
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand<TaskListViewModel>(EditListEntry);
+        //    }
+        //}
 
-        public ICommand SelectTaskItem
-        {
-            get
-            {
-                return new DelegateCommand<TaskItemViewModel>(SelectItem);
-            }
-        }
+        //public ICommand SelectTaskItem
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand<TaskItemViewModel>(SelectItem);
+        //    }
+        //}
 
-        public ICommand CreateTaskItem
-        {
-            get
-            {
-                return new DelegateCommand<TaskListViewModel>(CreateTask);
-            }
-        }
+        //public ICommand CreateTaskItem
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand<TaskListViewModel>(CreateTask);
+        //    }
+        //}
 
         public ICommand SaveTaskItem
         {
@@ -96,21 +98,21 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             }
         }
 
-        public ICommand SaveTaskListEdit
-        {
-            get
-            {
-                return new DelegateCommand(UpdateListEntry);
-            }
-        }
+        //public ICommand SaveTaskListEdit
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand(UpdateListEntry);
+        //    }
+        //}
 
-        public ICommand EditTaskItem
-        {
-            get
-            {
-                return new DelegateCommand<TaskItemViewModel>(EditTask);
-            }
-        }
+        //public ICommand EditTaskItem
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand<TaskItemViewModel>(EditTask);
+        //    }
+        //}
 
         public ICommand CancelEditTaskItem
         {
@@ -128,13 +130,13 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             }
         }
 
-        public ICommand DeleteListItem
-        {
-            get
-            {
-                return new DelegateCommand<TaskListViewModel>(DeleteTaskListItem);
-            }
-        }
+        //public ICommand DeleteListItem
+        //{
+        //    get
+        //    {
+        //        return new DelegateCommand<TaskListViewModel>(DeleteTaskListItem);
+        //    }
+        //}
 
         private void SaveTask(TaskItemViewModel taskItem)
         {
@@ -169,7 +171,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             }
         }
 
-        private void EditTask(TaskItemViewModel taskItem)
+        internal void EditTask(TaskItemViewModel taskItem)
         {
             // Set the active list to the parent task item if none currently active
             if (_activeTaskList == null)
@@ -183,7 +185,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             }
         }
 
-        private void ExpandItem(TaskListViewModel taskListItem)
+        internal void ExpandItem(TaskListViewModel taskListItem)
         {
             if (_activeTaskList != null && _activeTaskList.IsEdit == true)
             {
@@ -194,7 +196,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             taskListItem.IsExpanded = !taskListItem.IsExpanded;
         }
 
-        private void EditListEntry(TaskListViewModel taskListItem)
+        internal void EditListEntry(TaskListViewModel taskListItem)
         {
             if (_activeTaskList != null && _activeTaskList.IsEdit == true)
             {
@@ -204,7 +206,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             _activeTaskList = taskListItem;
             _activeTaskList.IsEdit = true;
         }
-        private void DeleteTaskListItem(TaskListViewModel taskListItem)
+        internal void DeleteTaskListItem(TaskListViewModel taskListItem)
         {
             if (_activeTaskList != null && _activeTaskList.IsEdit == false)
             {
@@ -227,7 +229,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             }
         }
 
-        private void UpdateListEntry()
+        internal void UpdateListEntry()
         {
             _activeTaskList.SaveChanges();
             _activeTaskList.IsEdit = false;
@@ -251,7 +253,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             EditListEntry(_activeTaskList);
         }
 
-        private void CreateTask(TaskListViewModel parentTaskList)
+        internal void CreateTask(TaskListViewModel parentTaskList)
         {
             if (_activeTaskList == null)
             {
@@ -271,7 +273,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             newTask.CreateNew(_activeTaskList.Id);
         }
 
-        private void SelectItem(TaskItemViewModel selectedItem)
+        internal void SelectItem(TaskItemViewModel selectedItem)
         {
             if (_activeTaskList == null)
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
+using Nulah.Everythinger.Plugins.Core;
 using Nulah.Everythinger.Plugins.Core.Models;
 using Nulah.WPF.Toolbox.Utilities;
 
@@ -51,9 +52,59 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
 
         }
 
+        public ICommand CreateTaskItem
+        {
+            get
+            {
+                return new DelegateCommand<TaskListViewModel>(_viewModel.CreateTask);
+            }
+        }
+        public ICommand ExpandListItem
+        {
+            get
+            {
+                return new DelegateCommand<TaskListViewModel>(_viewModel.ExpandItem);
+            }
+        }
+        public ICommand DeleteListItem
+        {
+            get
+            {
+                return new DelegateCommand<TaskListViewModel>(_viewModel.DeleteTaskListItem);
+            }
+        }
+
+        public ICommand EditListItem
+        {
+            get
+            {
+                return new DelegateCommand<TaskListViewModel>(_viewModel.EditListEntry);
+            }
+        }
+
+        public ICommand SaveTaskListEdit
+        {
+            get
+            {
+                return new DelegateCommand(_viewModel.UpdateListEntry);
+            }
+        }
+
+        public ICommand SelectTaskItem
+        {
+            get
+            {
+                return new DelegateCommand<TaskItemViewModel>(_viewModel.SelectItem);
+            }
+        }
+
+        private readonly TaskControlViewModel _viewModel;
+
+
         public TaskListViewModel()
         {
             _taskItems = new ObservableCollection<TaskItemViewModel>();
+            _viewModel = ViewManager.GetView<TaskControlViewModel>();
         }
     }
 }

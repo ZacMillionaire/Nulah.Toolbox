@@ -28,16 +28,23 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Label Content="Last Updated"/>
             <Label Content="{Binding LastActionDate}"/>
+            <ComboBox ItemsSource="{Binding AvailableTaskStates}" SelectedItem="{Binding TaskState}">
+            </ComboBox>
         </StackPanel>
-        <TextBlock Grid.Row="2" Text="{Binding Content}"></TextBlock>
+        <!--<TextBlock Grid.Row="2" Text="{Binding Content}"></TextBlock>-->
+        <WebBrowser Grid.Row="2" local:BrowserBehavior.Html="{Binding Content}" ContextMenu="{x:Null}"></WebBrowser>
         <Button Grid.Row="3" Grid.Column="1" Width="auto" Height="auto" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Button.Content>
                 Edit
             </Button.Content>
             <Button.InputBindings>
-                <MouseBinding Gesture="LeftClick"
+                <!--<MouseBinding Gesture="LeftClick"
                                           Command="{Binding DataContext.EditTaskItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
+                                          CommandParameter="{Binding}" />-->
+                <MouseBinding Gesture="LeftClick"
+                                          Command="{Binding EditTaskItem}"
                                           CommandParameter="{Binding}" />
+
             </Button.InputBindings>
         </Button>
     </Grid>
