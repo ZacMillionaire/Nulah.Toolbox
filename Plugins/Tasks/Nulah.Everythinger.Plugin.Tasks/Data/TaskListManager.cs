@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Nulah.Everythinger.Plugins.Tasks.Data.Models;
 using Nulah.WPF.Toolbox.Utilities;
@@ -26,6 +27,23 @@ namespace Nulah.Everythinger.Plugins.Tasks.Data
             var lists = new List<TaskList>();
 
             return lists;
+        }
+
+        public TaskList CreateTaskList()
+        {
+            var newTaskList = new TaskList
+            {
+                Id = Guid.NewGuid(),
+                Created = DateTime.UtcNow,
+                Name = "<New Task List>"
+            };
+            _database.Insert(newTaskList);
+            var createdTaskList = _database.Query<TaskList>("SELECT [Id],[Created],[Name] FROM [TaskList] WHERE [Id] = @Id", new Dictionary<string, object>
+            {
+                {"@Id", newTaskList.Id }
+            });
+
+            return createdTaskList.FirstOrDefault();
         }
     }
 }
