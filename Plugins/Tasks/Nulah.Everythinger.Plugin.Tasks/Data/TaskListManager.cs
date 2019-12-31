@@ -22,9 +22,9 @@ namespace Nulah.Everythinger.Plugins.Tasks.Data
             _database.CreateTable<TaskItem>();
         }
 
-        public List<TaskList> GetTaskLists()
+        public IEnumerable<TaskList> GetTaskLists()
         {
-            var lists = new List<TaskList>();
+            var lists = _database.Query<TaskList>("SELECT [Id],[Created],[Name] FROM [TaskList] ORDER BY [Name]");
 
             return lists;
         }

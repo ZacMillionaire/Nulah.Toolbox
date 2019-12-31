@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 using Nulah.Everythinger.Plugins.Core;
 using Nulah.Everythinger.Plugins.Core.Models;
+using Nulah.Everythinger.Plugins.Tasks.Data.Models;
 using Nulah.WPF.Toolbox.Utilities;
 
 namespace Nulah.Everythinger.Plugins.Tasks.Models
@@ -23,7 +24,16 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             }
         }
 
-        private ObservableCollection<TaskItemViewModel> _taskItems;
+        private DateTime _createdDate;
+
+        public DateTime CreatedDate
+        {
+            get { return _createdDate; }
+            set { _createdDate = value; }
+        }
+
+
+        private ObservableCollection<TaskItemViewModel> _taskItems = new ObservableCollection<TaskItemViewModel>();
         public ObservableCollection<TaskItemViewModel> TaskItems
         {
             get { return _taskItems; }
@@ -63,7 +73,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         {
             get
             {
-                return new DelegateCommand<TaskListViewModel>(_viewModel.ExpandItem);
+                return new DelegateCommand(Expand);
             }
         }
         public ICommand DeleteListItem
@@ -78,7 +88,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         {
             get
             {
-                return new DelegateCommand<TaskListViewModel>(_viewModel.EditListEntry);
+                return new DelegateCommand(Edit);
             }
         }
 
@@ -103,8 +113,48 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
 
         public TaskListViewModel()
         {
-            _taskItems = new ObservableCollection<TaskItemViewModel>();
             _viewModel = ViewManager.GetView<TaskControlViewModel>();
+        }
+
+        public TaskListViewModel(TaskList x) : this()
+        {
+            this.Id = x.Id;
+            this.Name = x.Name;
+            this.CreatedDate = x.Created;
+        }
+
+        /// <summary>
+        /// Toggles the expanded state of the task item
+        /// </summary>
+        private void Expand()
+        {
+            if (_viewModel.CurrentTaskListState == TaskListState.Edit)
+            {
+                return;
+            }
+
+            _viewModel.SetActiveTaskList(this);
+            IsExpanded = !IsExpanded;
+        }
+
+        private void Edit()
+        {
+            if (_viewModel.CurrentTaskListState == TaskListState.Edit)
+            {
+                return;
+            }
+
+            _viewModel.SetActiveTaskList(this);
+            IsEdit = true;
+        }
+
+        /// <summary>
+        /// Used after creating a new list, expands the created item and puts it into an edit state
+        /// </summary>
+        public void ExpandAndEdit()
+        {
+            Expand();
+            Edit();
         }
     }
 }
