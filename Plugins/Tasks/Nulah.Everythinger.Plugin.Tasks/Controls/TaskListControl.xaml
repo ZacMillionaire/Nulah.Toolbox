@@ -32,6 +32,32 @@
             </Button.InputBindings>
         </Button>
         <ItemsControl Grid.Row="1" x:Name="TaskLists" ItemsSource="{Binding TaskLists}" Background="{DynamicResource ControlBackgroundDark}">
+            <ItemsControl.Style>
+                <Style TargetType="ItemsControl">
+                    <Style.Triggers>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                No Tasks Lists Created. Click the add button to get started.
+                                            </TextBlock.Text>
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="{DynamicResource ControlTextForeground1}" />
+                                                    <Setter Property="FontSize" Value="{DynamicResource TextHeadingSize1}"/>
+                                                    <Setter Property="TextAlignment" Value="Center"/>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.Style>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:TaskListViewModel}">
                     <Grid Background="{DynamicResource ControlBackgroundDark2}">
