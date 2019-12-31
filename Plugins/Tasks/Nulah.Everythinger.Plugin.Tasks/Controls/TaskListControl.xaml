@@ -93,7 +93,7 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                                <TextBox Margin="0,0,15,0" Text="{Binding Name}" Foreground="{DynamicResource ControlTextForegroundDark}" VerticalAlignment="Center" FontSize="{DynamicResource TextHeadingSize1}">
+                                <TextBox x:Name="TaskNameEditBox" Margin="0,0,15,0" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="{DynamicResource ControlTextForegroundDark}" VerticalAlignment="Center" FontSize="{DynamicResource TextHeadingSize1}">
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">
                                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -195,8 +195,7 @@
                                     </Button.Style>
                                     <Button.InputBindings>
                                         <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding SaveTaskListEdit}"
-                                          CommandParameter="{Binding}"/>
+                                          Command="{Binding SaveTaskListEdit}" CommandParameter="{Binding}"/>
                                     </Button.InputBindings>
                                 </Button>
                                 <Button Width="44">

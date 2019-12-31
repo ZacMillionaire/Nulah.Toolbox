@@ -14,6 +14,10 @@ namespace Nulah.Everythinger.Plugins.Tasks.Data.Models
         public string Name { get; set; }
         [NulahColumn]
         public DateTime Created { get; set; }
+        [NulahColumn]
+        public DateTime Updated { get; set; }
+        [NulahColumn]
+        public bool IsDeleted { get; set; }
 
         public List<TaskItem> Tasks { get; set; }
     }

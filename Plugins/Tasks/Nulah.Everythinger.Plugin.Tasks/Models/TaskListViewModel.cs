@@ -58,18 +58,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
 
         public Guid Id { get; set; }
 
-        public void SaveChanges()
-        {
 
-        }
-
-        public ICommand CreateTaskItem
-        {
-            get
-            {
-                return new DelegateCommand<TaskListViewModel>(_viewModel.CreateTask);
-            }
-        }
         public ICommand ExpandListItem
         {
             get
@@ -77,6 +66,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
                 return new DelegateCommand(Expand);
             }
         }
+
         public ICommand DeleteListItem
         {
             get
@@ -97,7 +87,15 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         {
             get
             {
-                return new DelegateCommand(_viewModel.UpdateListEntry);
+                return new DelegateCommand(Update);
+            }
+        }
+
+        public ICommand CreateTaskItem
+        {
+            get
+            {
+                return new DelegateCommand<TaskListViewModel>(_viewModel.CreateTask);
             }
         }
 
@@ -105,8 +103,13 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         {
             get
             {
-                return new DelegateCommand<TaskItemViewModel>(_viewModel.SelectItem);
+                return new DelegateCommand<TaskItemViewModel>(Select);
             }
+        }
+
+        public void a(object sender, object b)
+        {
+
         }
 
         private readonly TaskControlViewModel _viewModel;
@@ -117,11 +120,26 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             _viewModel = ViewManager.GetView<TaskControlViewModel>();
         }
 
-        public TaskListViewModel(TaskList x) : this()
+        /// <summary>
+        /// The TaskList that generated the view model
+        /// </summary>
+        private TaskList _backingTask;
+
+        public TaskListViewModel(TaskList taskList) : this()
         {
-            this.Id = x.Id;
-            this.Name = x.Name;
-            this.CreatedDate = x.Created;
+            UpdateView(taskList);
+        }
+
+        /// <summary>
+        /// Updates the state of the view with the given taskList
+        /// </summary>
+        /// <param name="taskList"></param>
+        private void UpdateView(TaskList taskList)
+        {
+            Id = taskList.Id;
+            Name = taskList.Name;
+            CreatedDate = taskList.Created;
+            _backingTask = taskList;
         }
 
         /// <summary>
@@ -169,6 +187,43 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             if (confirm == MessageBoxResult.Yes)
             {
                 _viewModel.RemoveTaskList(this);
+            }
+        }
+
+
+        private void Select(TaskItemViewModel taskItem)
+        {
+            _viewModel.SetActiveTaskList(this);
+
+            // Prevent changing the selected item if the task is unsaved or the list is in edit mode
+            if (_viewModel.CurrentTaskItemState == TaskItemState.Edit || _viewModel.CurrentTaskListState == TaskListState.Edit)
+            {
+                return;
+            }
+
+            _viewModel.SetActiveTaskItem(taskItem);
+        }
+
+        private void Update()
+        {
+            if (string.IsNullOrWhiteSpace(Name) == false)
+            {
+                SaveChanges();
+                IsEdit = false;
+            }
+        }
+
+        /// <summary>
+        /// Takes any non-view specific properties and updates the database as needed
+        /// </summary>
+        private void SaveChanges()
+        {
+            // Only commit a change if the name loaded differs from the given name
+            if (_backingTask.Name != Name)
+            {
+                _backingTask.Name = Name;
+                var updatedEntry = _viewModel.TaskListManager.UpdateTaskListEntry(_backingTask);
+                UpdateView(updatedEntry);
             }
         }
 
