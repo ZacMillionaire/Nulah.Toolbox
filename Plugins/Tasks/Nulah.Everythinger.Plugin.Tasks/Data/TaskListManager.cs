@@ -45,5 +45,14 @@ namespace Nulah.Everythinger.Plugins.Tasks.Data
 
             return createdTaskList.FirstOrDefault();
         }
+
+        internal void DeleteTaskList(Guid id)
+        {
+            _database.Delete<TaskList>("DELETE FROM [TaskList] WHERE [Id] = @Id", new Dictionary<string, object>{
+                {
+                "@Id",id
+                }
+            });
+        }
     }
 }

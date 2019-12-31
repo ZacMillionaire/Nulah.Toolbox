@@ -135,17 +135,22 @@
                                             <Setter Property="IsEnabled" Value="False"/>
                                             <Setter Property="Visibility" Value="Collapsed"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsEdit}" Value="True">
-                                                    <Setter Property="IsEnabled" Value="True"/>
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
+                                                <MultiDataTrigger>
+                                                    <MultiDataTrigger.Conditions>
+                                                        <Condition Binding="{Binding IsEdit}" Value="True"/>
+                                                        <Condition Binding="{Binding TaskItems.Count}" Value="0"/>
+                                                    </MultiDataTrigger.Conditions>
+                                                    <MultiDataTrigger.Setters>
+                                                        <Setter Property="IsEnabled" Value="True"/>
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </MultiDataTrigger.Setters>
+                                                </MultiDataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </Button.Style>
                                     <Button.InputBindings>
                                         <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DeleteListItem}"
-                                          CommandParameter="{Binding}">
+                                          Command="{Binding DeleteListItem}">
                                         </MouseBinding>
                                     </Button.InputBindings>
                                 </Button>

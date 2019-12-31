@@ -22,9 +22,14 @@ namespace Nulah.WPF.Toolbox.Utilities
             _database.Insert<T>(value);
         }
 
-        public IEnumerable<T> Query<T>(string query, Dictionary<string, object> parameters)
+        public IEnumerable<T> Query<T>(string query, Dictionary<string, object> parameters = null)
         {
             return _database.Query<T>(query, parameters);
+        }
+
+        public void Delete<T>(string deleteQuery, Dictionary<string, object> parameters = null)
+        {
+            _database.Delete<T>(deleteQuery, parameters);
         }
     }
 }

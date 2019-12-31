@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using Nulah.Everythinger.Plugins.Core;
 using Nulah.Everythinger.Plugins.Core.Models;
@@ -80,7 +81,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         {
             get
             {
-                return new DelegateCommand<TaskListViewModel>(_viewModel.DeleteTaskListItem);
+                return new DelegateCommand(Delete);
             }
         }
 
@@ -146,6 +147,29 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
 
             _viewModel.SetActiveTaskList(this);
             IsEdit = true;
+        }
+
+        private void Delete()
+        {
+            // Prevent delete if task items exist
+            if (_taskItems.Count != 0 || _viewModel.CurrentTaskListState != TaskListState.Edit)
+            {
+                return;
+            }
+
+            // Unlikely, but prevent deleting if this task isn't the active one
+            if (_viewModel.GetCurrentActiveList() != this)
+            {
+                return;
+            }
+
+            var confirm = MessageBox.Show($"[To be made into better confirm?] Delete List '{Name}'? This will also delete all tasks contained below.", "Confirm Delete",
+                MessageBoxButton.YesNo, MessageBoxImage.Error);
+
+            if (confirm == MessageBoxResult.Yes)
+            {
+                _viewModel.RemoveTaskList(this);
+            }
         }
 
         /// <summary>

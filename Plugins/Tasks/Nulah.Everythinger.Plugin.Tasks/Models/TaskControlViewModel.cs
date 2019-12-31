@@ -134,6 +134,26 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         }
 
         /// <summary>
+        /// Returns the current active task list, if any
+        /// </summary>
+        /// <returns></returns>
+        internal TaskListViewModel GetCurrentActiveList()
+        {
+            return _activeTaskList;
+        }
+
+        /// <summary>
+        /// Removes the given task, and sets the active task list to null
+        /// </summary>
+        /// <param name="taskListViewModel"></param>
+        internal void RemoveTaskList(TaskListViewModel taskListViewModel)
+        {
+            _taskListManager.DeleteTaskList(taskListViewModel.Id);
+            TaskLists.Remove(taskListViewModel);
+            SetActiveTaskList(null);
+        }
+
+        /// <summary>
         /// Returns if the task list has an entry in an edit state, which should prevent
         /// any other actions from happening
         /// </summary>
@@ -162,50 +182,6 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             if (_activeTaskList.IsEdit == false)
             {
                 taskItem.Edit();
-            }
-        }
-
-        //internal void ExpandItem(TaskListViewModel taskListItem)
-        //{
-        //    if (_activeTaskList != null && _activeTaskList.IsEdit == true)
-        //    {
-        //        return;
-        //    }
-
-        //    _activeTaskList = taskListItem;
-        //    taskListItem.IsExpanded = !taskListItem.IsExpanded;
-        //}
-
-        //internal void EditListEntry(TaskListViewModel taskListItem)
-        //{
-        //    if (_activeTaskList != null && _activeTaskList.IsEdit == true)
-        //    {
-        //        return;
-        //    }
-
-        //    _activeTaskList = taskListItem;
-        //    _activeTaskList.IsEdit = true;
-        //}
-        internal void DeleteTaskListItem(TaskListViewModel taskListItem)
-        {
-            if (_activeTaskList != null && _activeTaskList.IsEdit == false)
-            {
-                return;
-            }
-
-            // Unlikely but prevent deleting a task list that isn't the active task list
-            if (_activeTaskList != taskListItem)
-            {
-                return;
-            }
-
-            var confirm = MessageBox.Show($"[To be made into better confirm?] Delete List '{taskListItem.Name}'? This will also delete all tasks contained.", "Confirm Delete",
-                MessageBoxButton.YesNo, MessageBoxImage.Error);
-
-            if (confirm == MessageBoxResult.Yes)
-            {
-                TaskLists.Remove(taskListItem);
-                _activeTaskList = null;
             }
         }
 
