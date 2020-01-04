@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Nulah.Everythinger.Plugins.Core;
+using Nulah.Everythinger.Plugins.Tasks.Data.Models;
 using Nulah.WPF.Toolbox.Utilities;
 
 namespace Nulah.Everythinger.Plugins.Tasks.Models
 {
+    // TODO: Keeping this in sync with the data.models enum is going to be dumb in the future
     public enum TaskItemStates
     {
-        Default,
+        New,
+        NotStarted,
         InProgress,
         Complete,
         Cancelled
@@ -81,7 +85,15 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         public TaskItemStates TaskState
         {
             get { return _taskState; }
-            set { _taskState = value; RaisePropertyChangedEvent("TaskState"); }
+            set
+            {
+                _taskState = value;
+                RaisePropertyChangedEvent("TaskState");
+                if (_backingTaskItem != null)
+                {
+                    _viewModel.TaskListManager.UpdateTaskItem(_backingTaskItem, _backingTaskItem.Name, _backingTaskItem.Content, ModelStateToDatabaseState(_taskState));
+                }
+            }
         }
 
         public static List<TaskItemStates> AvailableTaskStates
@@ -90,9 +102,34 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             {
                 return Enum.GetValues(typeof(TaskItemStates))
                     .Cast<TaskItemStates>()
-                    .Where(x => x != TaskItemStates.Default)
                     .ToList();
             }
+        }
+
+        /// <summary>
+        /// Helper method to return the database enum for task states.
+        /// </summary>
+        /// <param name="modelState"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        private TaskState ModelStateToDatabaseState(TaskItemStates modelState)
+        {
+            // This is a bit of a hack to get around the disconnect between the database enum and the view model enum.
+            // I'll probably just tie the view model to the database model eventually
+            return (TaskState)Enum.ToObject(typeof(TaskState), modelState);
+        }
+
+        /// <summary>
+        /// Helper method to return the database enum for task states.
+        /// </summary>
+        /// <param name="modelState"></param>
+        /// <returns></returns>
+        [DebuggerStepThrough]
+        private TaskItemStates DatabaseStateToModelState(TaskState modelState)
+        {
+            // This is a bit of a hack to get around the disconnect between the database enum and the view model enum.
+            // I'll probably just tie the view model to the database model eventually
+            return (TaskItemStates)Enum.ToObject(typeof(TaskItemStates), modelState);
         }
 
         private bool _isNew;
@@ -147,55 +184,168 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         /// </summary>
         public Guid ListId { get; set; }
 
-        public void SaveChanges(bool discardChanges = false)
+        private void Save(bool discardChanges = false)
         {
             IsEditMode = false;
-            // If the item was added, create its entry
+            // Discard changes will be true if an edit is cancelled
+            if (discardChanges == false)
+            {
+                // Really need to make a better sync for TaskStates
+                var updatedTask = _viewModel.TaskListManager.UpdateTaskItem(_backingTaskItem, EditName, EditContent,
+                    ModelStateToDatabaseState(IsNew ? TaskItemStates.NotStarted : TaskState)
+                );
+                Content = updatedTask.Content;
+                Name = updatedTask.Name;
+                TaskState = DatabaseStateToModelState(updatedTask.State);
+            }
+            // If the item was added, remove the IsNew flag
             if (IsNew)
             {
                 IsNew = false;
-                TaskState = TaskItemStates.InProgress;
-            }
-            if (discardChanges == false)
-            {
-                Content = EditContent;
-                Name = EditName;
             }
         }
 
-        public void Edit()
+        private void UpdateTask()
         {
-            IsEditMode = true;
-            EditContent = Content;
-            EditName = Name;
+
         }
 
-        // example refactor for moving commands to their appropriate view models
         public ICommand EditTaskItem
         {
             get
             {
-                return new DelegateCommand<TaskItemViewModel>(_viewModel.EditTask);
+                return new DelegateCommand(Edit);
             }
         }
 
-        public void CreateNew(Guid parentListId)
+        public ICommand SelectTaskItem
         {
+            get
+            {
+                return new DelegateCommand(SelectTask);
+            }
+        }
+        public ICommand SaveTaskItem
+        {
+            get
+            {
+                return new DelegateCommand(SaveTask);
+            }
+        }
+
+        public ICommand CancelEditTaskItem
+        {
+            get
+            {
+                return new DelegateCommand(CancelEditTask);
+            }
+        }
+
+        /// <summary>
+        /// Selects a given task and sets it and this task list as active items
+        /// </summary>
+        /// <param name="taskItem"></param>
+        private void SelectTask()
+        {
+            _viewModel.SetActiveTaskList(ParentList);
+
+            // Prevent changing the selected item if the task is unsaved or the list is in edit mode
+            if (_viewModel.CurrentTaskItemState == ActiveTaskItemState.Edit || _viewModel.CurrentTaskListState == ActiveTaskListState.Edit)
+            {
+                return;
+            }
+
+            _backingTaskItem = _viewModel.TaskListManager.GetTaskItemById(_backingTaskItem.Id);
+
+            _viewModel.SetActiveTaskItem(this);
+        }
+
+        /// <summary>
+        /// TaskItem from data source that the view was created from
+        /// </summary>
+        private TaskItem _backingTaskItem { get; set; }
+
+        public void Create(TaskListViewModel parentTaskList)
+        {
+            ParentList = parentTaskList;
+
+            _backingTaskItem = _viewModel.TaskListManager.CreateTask(parentTaskList.Id);
+            SelectTask();
+
             IsNew = true;
-            Name = "<New Item>";
+            Name = _backingTaskItem.Name;
             Content = string.Empty;
-            CreatedDate = DateTime.UtcNow;
-            ListId = parentListId;
+            ListId = ParentList.Id;
+
             Edit();
         }
 
+        private void Edit()
+        {
+            _viewModel.SetActiveTaskItem(this);
+
+            // Only allow edit if the current task list is not being edited
+            if (_viewModel.CurrentTaskListState == ActiveTaskListState.Ready)
+            {
+                IsEditMode = true;
+                EditContent = Content;
+                EditName = Name;
+            }
+        }
+
+        private void CancelEditTask()
+        {
+            _viewModel.SetActiveTaskItem(this);
+
+            if (IsNew == false)
+            {
+                Save(true);
+            }
+            else
+            {
+                // If editing is cancelled and the item was new (ie, a new task was never saved), remove it from the view
+                _viewModel.RemoveTask(this);
+                _viewModel.TaskListManager.DeleteTask(_backingTaskItem.Id, hardDelete: true);
+            }
+        }
+
+        private void SaveTask()
+        {
+            _viewModel.SetActiveTaskItem(this);
+
+            if (_viewModel.CurrentTaskListState == ActiveTaskListState.Ready)
+            {
+                // TODO: this should also be made into a binding for buttons so that it's only enabled if the content is valid
+                if (string.IsNullOrWhiteSpace(EditName) || string.IsNullOrWhiteSpace(EditContent))
+                {
+                    MessageBox.Show("[TODO] Name or content cannot be empty");
+                    return;
+                }
+                Save();
+            }
+        }
+
         private readonly TaskControlViewModel _viewModel;
+        public TaskListViewModel ParentList { get; private set; }
 
         public TaskItemViewModel()
         {
             Name = "Design mode name";
             Updated = DateTime.UtcNow;
             CreatedDate = DateTime.UtcNow;
+            _viewModel = ViewManager.GetView<TaskControlViewModel>();
+        }
+
+        public TaskItemViewModel(TaskItem task)
+        {
+            CreatedDate = task.Created;
+            Name = task.Name;
+            Updated = task.Updated;
+            ListId = this.Id;
+            Content = task.Content;
+            Id = task.Id;
+            TaskState = (TaskItemStates)task.State;
+            _backingTaskItem = task;
             _viewModel = ViewManager.GetView<TaskControlViewModel>();
         }
     }

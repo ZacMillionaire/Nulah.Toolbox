@@ -21,4 +21,13 @@ namespace Nulah.Everythinger.Plugins.Tasks.Data.Models
 
         public List<TaskItem> Tasks { get; set; }
     }
+
+    [NulahTable]
+    public class TaskList_TaskItem
+    {
+        [NulahColumn]
+        public Guid ListId { get; set; }
+        [NulahColumn]
+        public Guid TaskId { get; set; }
+    }
 }

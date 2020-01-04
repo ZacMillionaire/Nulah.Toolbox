@@ -35,9 +35,7 @@
                     Save
                 </Button.Content>
                 <Button.InputBindings>
-                    <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DataContext.SaveTaskItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
-                                          CommandParameter="{Binding}" />
+                    <MouseBinding Gesture="LeftClick" Command="{Binding SaveTaskItem}" />
                 </Button.InputBindings>
             </Button>
             <Button Width="auto" Height="auto" >
@@ -45,9 +43,7 @@
                     Cancel
                 </Button.Content>
                 <Button.InputBindings>
-                    <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DataContext.CancelEditTaskItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
-                                          CommandParameter="{Binding}" />
+                    <MouseBinding Gesture="LeftClick" Command="{Binding CancelEditTaskItem}" CommandParameter="{Binding}" />
                 </Button.InputBindings>
             </Button>
         </StackPanel>

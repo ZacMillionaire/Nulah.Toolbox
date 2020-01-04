@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -48,6 +49,14 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             set { _isExpanded = value; RaisePropertyChangedEvent("IsExpanded"); }
         }
 
+        private bool _isActive;
+
+        public bool IsActive
+        {
+            get { return _isActive; }
+            set { _isActive = value; RaisePropertyChangedEvent("IsActive"); }
+        }
+
         private bool _isEdit;
 
         public bool IsEdit
@@ -56,6 +65,9 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             set { _isEdit = value; RaisePropertyChangedEvent("IsEdit"); }
         }
 
+        /// <summary>
+        /// Task list id from data source
+        /// </summary>
         public Guid Id { get; set; }
 
 
@@ -95,25 +107,11 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         {
             get
             {
-                return new DelegateCommand<TaskListViewModel>(_viewModel.CreateTask);
+                return new DelegateCommand(CreateTask);
             }
-        }
-
-        public ICommand SelectTaskItem
-        {
-            get
-            {
-                return new DelegateCommand<TaskItemViewModel>(Select);
-            }
-        }
-
-        public void a(object sender, object b)
-        {
-
         }
 
         private readonly TaskControlViewModel _viewModel;
-
 
         public TaskListViewModel()
         {
@@ -121,7 +119,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         }
 
         /// <summary>
-        /// The TaskList that generated the view model
+        /// The TaskList from the data source that generated the view model
         /// </summary>
         private TaskList _backingTask;
 
@@ -140,6 +138,8 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             Name = taskList.Name;
             CreatedDate = taskList.Created;
             _backingTask = taskList;
+
+            UpdateTaskList();
         }
 
         /// <summary>
@@ -147,18 +147,34 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         /// </summary>
         private void Expand()
         {
-            if (_viewModel.CurrentTaskListState == TaskListState.Edit)
+            if (_viewModel.CurrentTaskListState == ActiveTaskListState.Edit)
             {
                 return;
             }
 
-            _viewModel.SetActiveTaskList(this);
+            if (_viewModel.GetCurrentActiveList() != this)
+            {
+                _viewModel.SetActiveTaskList(this);
+            }
             IsExpanded = !IsExpanded;
+        }
+
+        private void UpdateTaskList()
+        {
+            TaskItems.Clear();
+
+            _backingTask.Tasks = _viewModel.TaskListManager.GetTasksForList(Id).ToList();
+
+            foreach (var task in _backingTask.Tasks)
+            {
+                TaskItems.Add(new TaskItemViewModel(task));
+            }
         }
 
         private void Edit()
         {
-            if (_viewModel.CurrentTaskListState == TaskListState.Edit)
+            // Prevent edit mode if a task is being edited
+            if (_viewModel.CurrentTaskItemState == ActiveTaskItemState.Edit || _viewModel.CurrentTaskListState == ActiveTaskListState.Edit)
             {
                 return;
             }
@@ -170,7 +186,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
         private void Delete()
         {
             // Prevent delete if task items exist
-            if (_taskItems.Count != 0 || _viewModel.CurrentTaskListState != TaskListState.Edit)
+            if (_taskItems.Count != 0 || _viewModel.CurrentTaskListState != ActiveTaskListState.Edit)
             {
                 return;
             }
@@ -181,7 +197,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
                 return;
             }
 
-            var confirm = MessageBox.Show($"[To be made into better confirm?] Delete List '{Name}'? This will also delete all tasks contained below.", "Confirm Delete",
+            var confirm = MessageBox.Show($"[TODO] Delete List '{Name}'? This will also delete all tasks contained below.", "Confirm Delete",
                 MessageBoxButton.YesNo, MessageBoxImage.Error);
 
             if (confirm == MessageBoxResult.Yes)
@@ -190,19 +206,6 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             }
         }
 
-
-        private void Select(TaskItemViewModel taskItem)
-        {
-            _viewModel.SetActiveTaskList(this);
-
-            // Prevent changing the selected item if the task is unsaved or the list is in edit mode
-            if (_viewModel.CurrentTaskItemState == TaskItemState.Edit || _viewModel.CurrentTaskListState == TaskListState.Edit)
-            {
-                return;
-            }
-
-            _viewModel.SetActiveTaskItem(taskItem);
-        }
 
         private void Update()
         {
@@ -225,6 +228,21 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
                 var updatedEntry = _viewModel.TaskListManager.UpdateTaskListEntry(_backingTask);
                 UpdateView(updatedEntry);
             }
+        }
+
+
+        private void CreateTask()
+        {
+            _viewModel.SetActiveTaskList(this);
+
+            if (_viewModel.CurrentTaskItemState == ActiveTaskItemState.Edit || _viewModel.CurrentTaskListState == ActiveTaskListState.Edit)
+            {
+                return;
+            }
+
+            var newTask = new TaskItemViewModel();
+            TaskItems.Add(newTask);
+            newTask.Create(this);
         }
 
         /// <summary>

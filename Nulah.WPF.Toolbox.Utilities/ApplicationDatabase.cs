@@ -33,9 +33,16 @@ namespace Nulah.WPF.Toolbox.Utilities
             _database.Update<T>(query, parameters);
         }
 
-        public void Delete<T>(string deleteQuery, Dictionary<string, object> parameters = null)
+        /// <summary>
+        /// Runs the given delete query and returns the number of rows affected
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="deleteQuery"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public int Delete<T>(string deleteQuery, Dictionary<string, object> parameters = null)
         {
-            _database.Delete<T>(deleteQuery, parameters);
+            return _database.Delete<T>(deleteQuery, parameters);
         }
 
         /// <summary>

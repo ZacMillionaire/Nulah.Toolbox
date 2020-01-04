@@ -38,13 +38,7 @@
                 Edit
             </Button.Content>
             <Button.InputBindings>
-                <!--<MouseBinding Gesture="LeftClick"
-                                          Command="{Binding DataContext.EditTaskItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type parent:TaskControl}}}"
-                                          CommandParameter="{Binding}" />-->
-                <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding EditTaskItem}"
-                                          CommandParameter="{Binding}" />
-
+                <MouseBinding Gesture="LeftClick" Command="{Binding EditTaskItem}" CommandParameter="{Binding}" />
             </Button.InputBindings>
         </Button>
     </Grid>

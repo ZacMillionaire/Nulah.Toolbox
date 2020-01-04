@@ -27,8 +27,7 @@
                 Add
             </Button.Content>
             <Button.InputBindings>
-                <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding CreateTaskList}"/>
+                <MouseBinding Gesture="LeftClick" Command="{Binding CreateTaskList}"/>
             </Button.InputBindings>
         </Button>
         <ItemsControl Grid.Row="1" x:Name="TaskLists" ItemsSource="{Binding TaskLists}" Background="{DynamicResource ControlBackgroundDark}">
@@ -72,9 +71,7 @@
                         <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource ControlBackgroundDark}">
                             <Grid Margin="5,0,0,0">
                                 <Grid.InputBindings>
-                                    <MouseBinding Gesture="LeftClick"
-                                          Command="{Binding ExpandListItem}"
-                                          CommandParameter="{Binding}" />
+                                    <MouseBinding Gesture="LeftClick" Command="{Binding ExpandListItem}" CommandParameter="{Binding}" />
                                 </Grid.InputBindings>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>

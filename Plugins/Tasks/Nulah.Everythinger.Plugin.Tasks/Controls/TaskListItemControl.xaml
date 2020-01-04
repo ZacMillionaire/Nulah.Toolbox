@@ -58,8 +58,11 @@
                                 </BeginStoryboard>
                             </DataTrigger.ExitActions>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding TaskState}" Value="{x:Static models:TaskItemStates.Default}">
-                            <Setter Property="Background" Value="#FF000000"/>
+                        <DataTrigger Binding="{Binding TaskState}" Value="{x:Static models:TaskItemStates.New}">
+                            <Setter Property="Background" Value="#FF00FF00"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding TaskState}" Value="{x:Static models:TaskItemStates.NotStarted}">
+                            <Setter Property="Background" Value="#FF000FF0"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding TaskState}" Value="{x:Static models:TaskItemStates.InProgress}">
                             <Setter Property="Background" Value="#FF00DCFF"/>
