@@ -27,7 +27,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label>Name</Label>
-        <TextBox Grid.Column="1" Text="{Binding EditName}" VerticalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="14"/>
+        <TextBox Grid.Column="1" Text="{Binding EditName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Stretch" VerticalContentAlignment="Center" FontSize="14"/>
         <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding EditContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Stretch" VerticalContentAlignment="Top" AcceptsTab="True" AcceptsReturn="True" TextWrapping="Wrap"/>
         <StackPanel Grid.Row="2" Grid.Column="1" Width="auto" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Width="auto" Height="auto">

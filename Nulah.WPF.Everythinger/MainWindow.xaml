@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="768" Width="1024" AllowDrop="True" SnapsToDevicePixels="True"
     WindowStartupLocation="CenterScreen"
-        UseLayoutRounding="True">
+        UseLayoutRounding="True" Closing="Window_Closing">
     <Grid>
         <Core:PluginMenuControl x:Name="PluginMenu" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
     </Grid>

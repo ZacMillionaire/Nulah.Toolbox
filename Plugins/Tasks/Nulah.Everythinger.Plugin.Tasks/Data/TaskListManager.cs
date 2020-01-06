@@ -146,7 +146,6 @@ namespace Nulah.Everythinger.Plugins.Tasks.Data
 
             taskItem.Revisions = GetTaskHistory(id).OrderByDescending(x => x.Timestamp).ToList();
 
-
             return taskItem;
         }
 

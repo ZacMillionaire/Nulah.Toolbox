@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using Nulah.Everythinger.Plugins.Core;
 using Nulah.Everythinger.Plugins.Tasks.Data.Models;
@@ -89,12 +90,16 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             {
                 _taskState = value;
                 RaisePropertyChangedEvent("TaskState");
-                if (_backingTaskItem != null)
+                // This really shouldn't be here but for now to get it working it is
+                if (_isInit == true && _backingTaskItem != null && ModelStateToDatabaseState(value) != _backingTaskItem.State)
                 {
                     _viewModel.TaskListManager.UpdateTaskItem(_backingTaskItem, _backingTaskItem.Name, _backingTaskItem.Content, ModelStateToDatabaseState(_taskState));
                 }
             }
         }
+
+        // Quick hack to use as a flag to indicate data is loaded
+        private bool _isInit { get; set; }
 
         public static List<TaskItemStates> AvailableTaskStates
         {
@@ -158,6 +163,9 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             get { return _content; }
             set { _content = value; RaisePropertyChangedEvent("Content"); }
         }
+
+
+
         private string _editContent;
 
         public string EditContent
@@ -256,7 +264,7 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             }
 
             _backingTaskItem = _viewModel.TaskListManager.GetTaskItemById(_backingTaskItem.Id);
-
+            UpdateFromBackingTask();
             _viewModel.SetActiveTaskItem(this);
         }
 
@@ -288,8 +296,8 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             if (_viewModel.CurrentTaskListState == ActiveTaskListState.Ready)
             {
                 IsEditMode = true;
-                EditContent = Content;
-                EditName = Name;
+                EditContent = _backingTaskItem.Content;
+                EditName = _backingTaskItem.Name;
             }
         }
 
@@ -336,17 +344,24 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             _viewModel = ViewManager.GetView<TaskControlViewModel>();
         }
 
+        private void UpdateFromBackingTask()
+        {
+            CreatedDate = _backingTaskItem.Created;
+            Name = _backingTaskItem.Name;
+            Content = _backingTaskItem.Content;
+            Updated = _backingTaskItem.Updated;
+            ListId = this.Id;
+            Content = _backingTaskItem.Content;
+            Id = _backingTaskItem.Id;
+            TaskState = (TaskItemStates)_backingTaskItem.State;
+        }
+
         public TaskItemViewModel(TaskItem task)
         {
-            CreatedDate = task.Created;
-            Name = task.Name;
-            Updated = task.Updated;
-            ListId = this.Id;
-            Content = task.Content;
-            Id = task.Id;
-            TaskState = (TaskItemStates)task.State;
-            _backingTaskItem = task;
             _viewModel = ViewManager.GetView<TaskControlViewModel>();
+            _backingTaskItem = task;
+            UpdateFromBackingTask();
+            _isInit = true;
         }
     }
 }
