@@ -24,7 +24,7 @@
             <RowDefinition/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Label Content="{Binding Name}" FontSize="{DynamicResource TextHeadingSize1}"/>
+        <TextBlock Text="{Binding Name}" FontSize="{DynamicResource TextHeadingSize1}" LineStackingStrategy="MaxHeight" TextWrapping="WrapWithOverflow"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Label Content="Last Updated"/>
             <Label Content="{Binding LastActionDate}"/>

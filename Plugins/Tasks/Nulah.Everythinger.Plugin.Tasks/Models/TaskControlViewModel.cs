@@ -73,22 +73,6 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
             TaskLists = new ObservableCollection<TaskListViewModel>(taskLists.Select(x => new TaskListViewModel(x)));
         }
 
-        //public ICommand SaveTaskItem
-        //{
-        //    get
-        //    {
-        //        return new DelegateCommand<TaskItemViewModel>(SaveTask);
-        //    }
-        //}
-
-        //public ICommand CancelEditTaskItem
-        //{
-        //    get
-        //    {
-        //        return new DelegateCommand<TaskItemViewModel>(CancelEditTask);
-        //    }
-        //}
-
         public ICommand CreateTaskList
         {
             get
@@ -96,39 +80,6 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
                 return new DelegateCommand(CreateNewTaskList);
             }
         }
-
-        //private void SaveTask(TaskItemViewModel taskItem)
-        //{
-        //    // Set the active list to the parent task item if none currently active
-        //    if (_activeTaskList == null)
-        //    {
-        //        _activeTaskList = TaskLists.First(x => x.Id == taskItem.ListId);
-        //    }
-
-        //    if (_activeTaskList.IsEdit == false)
-        //    {
-        //        taskItem.SaveChanges();
-        //    }
-        //}
-
-        //private void CancelEditTask(TaskItemViewModel taskItem)
-        //{
-        //    // Set the active list to the parent task item if none currently active
-        //    if (_activeTaskList == null)
-        //    {
-        //        _activeTaskList = TaskLists.First(x => x.Id == taskItem.ListId);
-        //    }
-
-        //    if (taskItem.IsNew == false)
-        //    {
-        //        taskItem.Save(true);
-        //    }
-        //    else
-        //    {
-        //        _activeTaskList.TaskItems.Remove(taskItem);
-        //        SelectedTaskListItem = null;
-        //    }
-        //}
 
         /// <summary>
         /// Updates the active task list to the given TaskListViewModel

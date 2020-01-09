@@ -205,6 +205,8 @@ namespace Nulah.Everythinger.Plugins.Tasks.Models
                 Content = updatedTask.Content;
                 Name = updatedTask.Name;
                 TaskState = DatabaseStateToModelState(updatedTask.State);
+                // Update the backing task
+                _backingTaskItem = updatedTask;
             }
             // If the item was added, remove the IsNew flag
             if (IsNew)
